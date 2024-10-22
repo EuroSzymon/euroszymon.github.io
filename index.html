@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Viewer Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-
         body {
             margin: 0;
             padding: 0;
             background-color: black;
-            font-family: 'Inter', sans-serif;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            font-family: sans-serif;
         }
 
         .container {
@@ -25,124 +23,242 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            border: 5px solid;
-            border-radius: 50px;
-            box-sizing: border-box;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: rainbow-animation 5s linear infinite;
         }
 
-        @keyframes rainbow-animation {
-            0% { border-color: red; }
-            14% { border-color: orange; }
-            28% { border-color: yellow; }
-            42% { border-color: green; }
-            57% { border-color: blue; }
-            71% { border-color: indigo; }
-            85% { border-color: violet; }
-            100% { border-color: red; }
+        .object {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: grab;
+            background-color: gray;
         }
 
-        @keyframes rainbow-button-animation {
-            0% { background-color: red; }
-            14% { background-color: orange; }
-            28% { background-color: yellow; }
-            42% { background-color: green; }
-            57% { background-color: blue; }
-            71% { background-color: indigo; }
-            85% { background-color: violet; }
-            100% { background-color: red; }
-        }
-
-        #pc-content {
-            display: none;
-            text-align: center;
-        }
-
-        .button {
-            background-color: blue;
-            color: white;
-            border: none;
-            padding: 25px 40px;
-            margin: 20px 0;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 12px;
+        .icon-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
-            max-width: 400px;
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, opacity 0.3s;
-            opacity: 1;
+            max-width: 600px;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
-        .button:hover {
-            animation: rainbow-button-animation 5s linear infinite;
-            color: black;
-            opacity: 0.9;
+        .icon {
+            width: 60px;
+            height: 60px;
+            cursor: default;
         }
 
-        #mobile-content {
-            display: none;
-            text-align: center;
+        .checkmark {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            fill: transparent;
+            z-index: -1;
         }
 
-        @media only screen and (max-width: 768px) {
-            #mobile-content {
-                display: block;
-            }
-
-            #pc-content {
-                display: none;
-            }
+        .book-icon {
+            fill: white;
         }
 
-        @media only screen and (min-width: 769px) {
-            #mobile-content {
-                display: none;
-            }
+        .phone-icon {
+            fill: white;
+        }
 
-            #pc-content {
-                display: block;
-            }
+        .icon.locked {
+            opacity: 0.5;
+        }
+
+        .icon.unlocked {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container" id="container">
-        <div id="pc-content">
-            <button class="button" id="releasesButton" onclick="window.location.href='https://github.com/EuroSzymon/ModelViewerTest/releases'">
-                View Releases Tab
-            </button>
-            <button class="button" id="mobileVersionButton" onclick="window.location.href='https://euroszymon.github.io/ModelViewerTest'">
-                Switch to Mobile Version
-            </button>
+        <div class="icon-container">
+            <div style="position: relative;">
+                <svg class="icon book-icon locked" id="book-icon" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="60" fill="white" stroke="black" stroke-width="2" />
+                    <rect x="20" y="20" width="60" height="4" fill="lightgray" />
+                    <rect x="20" y="30" width="60" height="4" fill="lightgray" />
+                    <rect x="20" y="40" width="60" height="4" fill="lightgray" />
+                    <rect x="20" y="50" width="60" height="4" fill="lightgray" />
+                    <rect x="20" y="60" width="60" height="4" fill="lightgray" />
+                </svg>
+                <svg class="checkmark" id="book-checkmark" viewBox="0 0 24 24">
+                    <path d="M9 16.2l-3.5-3.5L4 14l5 5 10-10-1.5-1.5L9 16.2z"/>
+                </svg>
+            </div>
+
+            <div style="position: relative;">
+                <svg class="icon phone-icon locked" id="phone-icon" viewBox="0 0 24 24">
+                    <path d="M7.01 2h9.99C18.11 2 19 2.9 19 3.99v16.02c0 1.09-.89 1.99-1.99 1.99H7.01C5.91 22 5 21.1 5 20.01V3.99C5 2.9 5.9 2 7.01 2zm9.99 2H7.01v16.02h9.99V4z"/>
+                </svg>
+
+                <svg class="checkmark" id="phone-checkmark" viewBox="0 0 24 24">
+                    <path d="M9 16.2l-3.5-3.5L4 14l5 5 10-10-1.5-1.5L9 16.2z"/>
+                </svg>
+            </div>
         </div>
+    </div>
 
     <script>
         const container = document.getElementById('container');
-        const buttons = document.querySelectorAll('.button');
+        const maxObjects = 3;
+        let objects = [null, null, null];
+        let unlockedUrl = null;
 
-        let isRainbow = true;
-        container.addEventListener('click', () => {
-            if (isRainbow) {
-                container.style.animation = 'none'; 
-                container.style.borderColor = 'grey'; 
-                buttons.forEach(button => {
-                    button.style.backgroundColor = 'blue'; 
-                    button.disabled = true;
-                });
-            } else {
-                container.style.animation = 'rainbow-animation 5s linear infinite';
-                container.style.borderColor = '';
-                buttons.forEach(button => {
-                    button.style.backgroundColor = '';
-                    button.disabled = false;
-                });
-            }
-            isRainbow = !isRainbow;
+        const predefinedColors = [
+            '#FF5733',
+            '#33FF57',
+            '#3357FF',
+            '#FF33A8',
+            '#F9FF33',
+            '#33FFF7'
+        ];
+
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkmarks = [
+                document.getElementById('book-checkmark'),
+                document.getElementById('phone-checkmark')
+            ];
+
+            checkmarks.forEach(checkmark => {
+                checkmark.style.fill = getRandomColor();
+            });
+        });
+
+        function getRandomColor() {
+            const randomIndex = Math.floor(Math.random() * predefinedColors.length);
+            return predefinedColors[randomIndex];
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (unlockedUrl) return;
+
+            if (event.key === '1' || event.key === '2' || event.key === '3') {
+                const objectIndex = parseInt(event.key) - 1;
+
+                if (!objects[objectIndex]) {
+                    const randomX = Math.random() * (window.innerWidth - 70);
+                    const randomY = Math.random() * (window.innerHeight - 70);
+                    spawnObject(randomX, randomY, objectIndex);
+                } else {
+                    despawnObject(objectIndex);
+                }
+            }
+        });
+        
+        function spawnObject(x, y, index) {
+            const newObject = document.createElement('div');
+            newObject.className = 'object';
+            newObject.style.backgroundColor = getRandomColor();
+            newObject.style.left = `${x}px`;
+            newObject.style.top = `${y}px`;
+
+            newObject.addEventListener('mousedown', (event) => startDragging(event, newObject, index));
+
+            container.appendChild(newObject);
+            objects[index] = newObject;
+        }
+
+        function despawnObject(index) {
+            if (objects[index]) {
+                container.removeChild(objects[index]); 
+                objects[index] = null;
+            }
+        }
+
+        function checkForUnlock(index) {
+            const checkmarkColors = [
+                document.getElementById('book-checkmark').style.fill,
+                document.getElementById('phone-checkmark').style.fill
+            ];
+
+            if (objects[index] && objects[index].style.backgroundColor === checkmarkColors[0]) {
+                unlockUrl('https://github.com/EuroSzymon/ModelViewerTest/releases');
+            } else if (objects[index] && objects[index].style.backgroundColor === checkmarkColors[1]) {
+                unlockUrl('https://euroszymon.github.io/ModelViewerTest/');
+            }
+        }
+
+        function unlockUrl(url) {
+            if (unlockedUrl) return;
+
+            const icon = url.includes('book') ? document.getElementById('book-icon') : document.getElementById('phone-icon');
+            icon.classList.remove('locked');
+            icon.classList.add('unlocked');
+            icon.style.cursor = 'pointer';
+            icon.addEventListener('click', () => window.location.href = url);
+
+            unlockedUrl = url;
+        }
+
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function startDragging(event, object, index) {
+            isDragging = true;
+            offsetX = event.clientX - object.offsetLeft;
+            offsetY = event.clientY - object.offsetTop;
+
+            document.addEventListener('mousemove', (e) => onDrag(e, object));
+            document.addEventListener('mouseup', () => stopDragging(object, index));
+        }
+
+        function onDrag(event, object) {
+            if (!isDragging) return;
+
+            object.style.left = `${event.clientX - offsetX}px`;
+            object.style.top = `${event.clientY - offsetY}px`;
+
+            checkIconCollision(object);
+        }
+
+        function stopDragging(object, index) {
+            isDragging = false;
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', () => stopDragging(object, index));
+            checkForUnlock(index);
+        }
+
+        function checkIconCollision(object) {
+            const icons = [
+                document.getElementById('book-icon'),
+                document.getElementById('phone-icon')
+            ];
+
+            icons.forEach((icon, index) => {
+                const iconRect = icon.getBoundingClientRect();
+                const objectRect = object.getBoundingClientRect();
+
+                if (
+                    objectRect.left < iconRect.right &&
+                    objectRect.right > iconRect.left &&
+                    objectRect.top < iconRect.bottom &&
+                    objectRect.bottom > iconRect.top
+                ) {
+                    icon.classList.remove('locked');
+                    icon.classList.add('unlocked');
+                } else {
+                    icon.classList.add('locked');
+                    icon.classList.remove('unlocked');
+                }
+            });
+        }
     </script>
 </body>
 </html>
