@@ -146,21 +146,22 @@
         }
 
         document.addEventListener('keydown', (event) => {
-    if (unlockedUrl) return;
+            if (unlockedUrl) return;
 
-    if (event.key === 'Enter') {
-        const objectIndex = parseInt(event.key) - 1;
+            const validKeys = ['1', '2', '3'];
+            if (validKeys.includes(event.key)) {
+                const objectIndex = parseInt(event.key) - 1;
 
-        if (!objects[objectIndex]) {
-            const randomX = Math.random() * (window.innerWidth - 70);
-            const randomY = Math.random() * (window.innerHeight - 70);
-            spawnObject(randomX, randomY, objectIndex);
-        } else {
-            despawnObject(objectIndex);
-        }
-    }
-});
-        
+                if (!objects[objectIndex]) {
+                    const randomX = Math.random() * (window.innerWidth - 70);
+                    const randomY = Math.random() * (window.innerHeight - 70);
+                    spawnObject(randomX, randomY, objectIndex);
+                } else {
+                    despawnObject(objectIndex);
+                }
+            }
+        });
+
         function spawnObject(x, y, index) {
             const newObject = document.createElement('div');
             newObject.className = 'object';
@@ -182,89 +183,90 @@
         }
 
         function checkForUnlock(index) {
-        const checkmarkColors = [
-            document.getElementById('book-checkmark').style.fill,
-            document.getElementById('phone-checkmark').style.fill
-        ];
+            const checkmarkColors = [
+                document.getElementById('book-checkmark').style.fill,
+                document.getElementById('phone-checkmark').style.fill
+            ];
 
-        const objectColor = objects[index] ? objects[index].style.backgroundColor : null;
-        if (objectColor === checkmarkColors[0]) {
-            unlockUrl('https://github.com/EuroSzymon/ModelViewerTest/releases', 'book');
-        } else if (objectColor === checkmarkColors[1]) {
-            unlockUrl('https://euroszymon.github.io/ModelViewerTest/', 'phone');
+            const objectColor = objects[index] ? objects[index].style.backgroundColor : null;
+            if (objectColor === checkmarkColors[0]) {
+                unlockUrl('https://github.com/EuroSzymon/ModelViewerTest/releases', 'book');
+            } else if (objectColor === checkmarkColors[1]) {
+                unlockUrl('https://euroszymon.github.io/ModelViewerTest/', 'phone');
+            }
         }
-    }
 
-function unlockUrl(url, iconType) {
-        if (unlockedUrl) return;
+        function unlockUrl(url, iconType) {
+            if (unlockedUrl) return;
 
-        const icon = iconType === 'book' ? document.getElementById('book-icon') : document.getElementById('phone-icon');
-        icon.classList.remove('locked');
-        icon.classList.add('unlocked');
-        icon.style.cursor = 'pointer';
+            const icon = iconType === 'book' ? document.getElementById('book-icon') : document.getElementById('phone-icon');
+            icon.classList.remove('locked');
+            icon.classList.add('unlocked');
+            icon.style.cursor = 'pointer';
 
-        icon.addEventListener('click', () => window.location.href = url);
+            icon.addEventListener('click', () => window.location.href = url);
 
-        unlockedUrl = url;
-    }
+            unlockedUrl = url;
+        }
 
         let isDragging = false;
         let offsetX = 0;
         let offsetY = 0;
 
         function startDragging(event, object, index) {
-    isDragging = true;
-    offsetX = event.clientX - object.offsetLeft;
-    offsetY = event.clientY - object.offsetTop;
+            isDragging = true;
+            offsetX = event.clientX - object.offsetLeft;
+            offsetY = event.clientY - object.offsetTop;
 
-    document.addEventListener('mousemove', (e) => onDrag(e, object));
-    document.addEventListener('mouseup', () => stopDragging(object, index));
-}
-function onDrag(event, object) {
-    if (!isDragging) return;
+            document.addEventListener('mousemove', (e) => onDrag(e, object));
+            document.addEventListener('mouseup', () => stopDragging(object, index));
+        }
 
-    object.style.left = `${event.clientX - offsetX}px`;
-    object.style.top = `${event.clientY - offsetY}px`;
+        function onDrag(event, object) {
+            if (!isDragging) return;
 
-    checkIconCollision(object);
-}
+            object.style.left = `${event.clientX - offsetX}px`;
+            object.style.top = `${event.clientY - offsetY}px`;
+
+            checkIconCollision(object);
+        }
 
         function stopDragging(object, index) {
-        isDragging = false;
+            isDragging = false;
 
-        document.removeEventListener('mousemove', (e) => onDrag(e, object));
-        document.removeEventListener('mouseup', () => stopDragging(object, index));
-    
-    checkForUnlock(index);
-}
+            document.removeEventListener('mousemove', (e) => onDrag(e, object));
+            document.removeEventListener('mouseup', () => stopDragging(object, index));
+
+            checkForUnlock(index);
+        }
 
         function checkIconCollision(object) {
-        const icons = [
-            { icon: document.getElementById('book-icon'), checkmarkColor: document.getElementById('book-checkmark').style.fill },
-            { icon: document.getElementById('phone-icon'), checkmarkColor: document.getElementById('phone-checkmark').style.fill }
-        ];
+            const icons = [
+                { icon: document.getElementById('book-icon'), checkmarkColor: document.getElementById('book-checkmark').style.fill },
+                { icon: document.getElementById('phone-icon'), checkmarkColor: document.getElementById('phone-checkmark').style.fill }
+            ];
 
-        icons.forEach(({ icon, checkmarkColor }) => {
-            const iconRect = icon.getBoundingClientRect();
-            const objectRect = object.getBoundingClientRect();
-            const objectColor = object.style.backgroundColor;
+            icons.forEach(({ icon, checkmarkColor }) => {
+                const iconRect = icon.getBoundingClientRect();
+                const objectRect = object.getBoundingClientRect();
+                const objectColor = object.style.backgroundColor;
 
-            if (
-                objectRect.left < iconRect.right &&
-                objectRect.right > iconRect.left &&
-                objectRect.top < iconRect.bottom &&
-                objectRect.bottom > iconRect.top
-            ) {
-                if (objectColor === checkmarkColor) {
-                    icon.classList.remove('locked');
-                    icon.classList.add('unlocked');
+                if (
+                    objectRect.left < iconRect.right &&
+                    objectRect.right > iconRect.left &&
+                    objectRect.top < iconRect.bottom &&
+                    objectRect.bottom > iconRect.top
+                ) {
+                    if (objectColor === checkmarkColor) {
+                        icon.classList.remove('locked');
+                        icon.classList.add('unlocked');
+                    }
+                } else {
+                    icon.classList.add('locked');
+                    icon.classList.remove('unlocked');
                 }
-            } else {
-                icon.classList.add('locked');
-                icon.classList.remove('unlocked');
-            }
-        });
-    }
+            });
+        }
     </script>
 </body>
 </html>
