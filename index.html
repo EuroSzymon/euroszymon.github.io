@@ -162,26 +162,6 @@
             }
         });
 
-        function spawnObject(x, y, index) {
-            const newObject = document.createElement('div');
-            newObject.className = 'object';
-            newObject.style.backgroundColor = getRandomColor();
-            newObject.style.left = `${x}px`;
-            newObject.style.top = `${y}px`;
-
-            newObject.addEventListener('mousedown', (event) => startDragging(event, newObject, index));
-
-            container.appendChild(newObject);
-            objects[index] = newObject;
-        }
-
-        function despawnObject(index) {
-            if (objects[index]) {
-                container.removeChild(objects[index]); 
-                objects[index] = null;
-            }
-        }
-
         function checkForUnlock(index) {
             const checkmarkColors = [
                 document.getElementById('book-checkmark').style.fill,
@@ -209,35 +189,58 @@
             unlockedUrl = url;
         }
 
-        let isDragging = false;
-        let offsetX = 0;
-        let offsetY = 0;
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
 
-        function startDragging(event, object, index) {
-            isDragging = true;
-            offsetX = event.clientX - object.offsetLeft;
-            offsetY = event.clientY - object.offsetTop;
+function onDrag(event) {
+    if (!isDragging) return;
 
-            document.addEventListener('mousemove', (e) => onDrag(e, object));
-            document.addEventListener('mouseup', () => stopDragging(object, index));
-        }
+    const object = objects[currentDraggedIndex];
+    object.style.left = `${event.clientX - offsetX}px`;
+    object.style.top = `${event.clientY - offsetY}px`;
 
-        function onDrag(event, object) {
-            if (!isDragging) return;
+    checkIconCollision(object);
+}
 
-            object.style.left = `${event.clientX - offsetX}px`;
-            object.style.top = `${event.clientY - offsetY}px`;
+function stopDrag() {
+    if (!isDragging) return;
 
-            checkIconCollision(object);
-        }
+    isDragging = false;
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('mouseup', stopDrag);
 
-        function stopDragging(object, index) {
-            isDragging = false;
+    checkForUnlock(currentDraggedIndex);
+}
 
-            document.removeEventListener('mousemove', (e) => onDrag(e, object));
-            document.removeEventListener('mouseup', () => stopDragging(object, index));
+function startDragging(event, object, index) {
+    isDragging = true;
+    currentDraggedIndex = index;
+    offsetX = event.clientX - object.offsetLeft;
+    offsetY = event.clientY - object.offsetTop;
 
-            checkForUnlock(index);
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', stopDrag);
+}
+
+function spawnObject(x, y, index) {
+    const newObject = document.createElement('div');
+    newObject.className = 'object';
+    newObject.style.backgroundColor = getRandomColor();
+    newObject.style.left = `${x}px`;
+    newObject.style.top = `${y}px`;
+
+    newObject.addEventListener('mousedown', (event) => startDragging(event, newObject, index));
+
+    container.appendChild(newObject);
+    objects[index] = newObject;
+}
+
+function despawnObject(index) {
+            if (objects[index]) {
+                container.removeChild(objects[index]); 
+                objects[index] = null;
+            }
         }
 
         function checkIconCollision(object) {
