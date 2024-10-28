@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    gap: 30px;
+}
+
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.object {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: grab;
+    background-color: gray;
+}
+
+.icon-container {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.icon-container > div {
+    padding: 10px;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    cursor: default;
+}
+
+.checkmark {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    fill: transparent;
+    z-index: -1;
+}
+
+.book-icon, .phone-icon {
+    fill: white;
+}
+
+.icon.locked {
+    opacity: 0.5;
+}
+
+.icon.unlocked {
+    cursor: pointer;
+}
+
+.text-label {
+    position: relative;
+    top: -3px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.copyfail {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
