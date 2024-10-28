@@ -101,41 +101,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
         }
-
-        .theme-icon {
-            fill: white;
-        }
-
-        body.light-mode .theme-icon {
-            fill: black;
-        }
-
-        :root {
-            --background-color: black;
-            --text-color: white;
-            --icon-fill-color: white;
-        }
-
-        body.light-mode {
-            --background-color: white;
-            --text-color: black;
-            --icon-fill-color: black;
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .icon {
-            fill: var(--icon-fill-color);
-        }
-
-        .text-label {
-            color: var(--text-color);
-        }
-
-
     </style>
 </head>
 <body>
@@ -157,8 +122,6 @@
 </div>
 
 <div style="position: relative;">
-    <button id="mode-toggle" class="mode-toggle">Switch to Light Mode</button>
-
     <div class="text-label copyfail" id="phone-label">Switch to Mobile Version</div>
     <svg class="icon phone-icon locked" id="phone-icon" viewBox="0 0 24 24">
         <path
@@ -167,21 +130,6 @@
     <svg class="checkmark" id="phone-checkmark" viewBox="0 0 24 24">
         <path d="M9 16.2l-3.5-3.5L4 14l5 5 10-10-1.5-1.5L9 16.2z" />
     </svg>
-    <svg class="icon theme-icon locked" id="theme-icon" viewBox="0 0 64 64">
-        <!-- Sun/Moon Icon -->
-        <circle cx="32" cy="32" r="14" fill="white" />
-        <g id="sun-rays">
-            <line x1="32" y1="2" x2="32" y2="12" stroke="white" stroke-width="4" />
-            <line x1="32" y1="52" x2="32" y2="62" stroke="white" stroke-width="4" />
-            <line x1="2" y1="32" x2="12" y2="32" stroke="white" stroke-width="4" />
-            <line x1="52" y1="32" x2="62" y2="32" stroke="white" stroke-width="4" />
-            <line x1="12" y1="12" x2="18" y2="18" stroke="white" stroke-width="4" />
-            <line x1="52" y1="52" x2="46" y2="46" stroke="white" stroke-width="4" />
-            <line x1="12" y1="52" x2="18" y2="46" stroke="white" stroke-width="4" />
-            <line x1="52" y1="12" x2="46" y2="18" stroke="white" stroke-width="4" />
-        </g>
-    </svg>
-
 </div>
 </body>
 
@@ -192,18 +140,18 @@
     let unlockedUrl = null;
 
     const predefinedColors = [
-    '#FF5733', 
-    '#33FF57',
-    '#3357FF',
-    '#FF33A8',
-    '#F9FF33', 
-    '#33FFF7', 
-    '#FF8C00', 
-    '#8A2BE2', 
-    '#FFD700', 
-    '#DC143C', 
-    '#20B2AA' 
-];
+        '#FF5733',
+        '#33FF57',
+        '#3357FF',
+        '#FF33A8',
+        '#F9FF33',
+        '#33FFF7',
+        '#FF0300',
+        '#129CFF',
+        '#C012FF',
+        '#C8FF12',
+        '#0000FF'
+    ];
     const usedColors = [];
 
     document.addEventListener('contextmenu', (event) => {
@@ -213,25 +161,16 @@
     document.addEventListener('DOMContentLoaded', () => {
         const checkmarks = [
             document.getElementById('book-checkmark'),
-            document.getElementById('phone-checkmark'),
-            document.getElementById('theme-checkmark')
-
+            document.getElementById('phone-checkmark')
         ];
 
         checkmarks.forEach((checkmark, index) => {
             const color = coloralgorithm();
             checkmark.style.fill = color;
 
-            const labels = [
-                document.getElementById('book-label'),
-                document.getElementById('phone-label'),
-                document.getElementById('theme-label') // New label
-            ];
-
-            labels[index].style.color = color;
+            const label = index === 0 ? document.getElementById('book-label') : document.getElementById('phone-label');
+            label.style.color = color;
         });
-
-
     });
 
     function coloralgorithm() {
@@ -269,8 +208,7 @@
     function check_buttonunlock(index) {
         const checkmarkColors = [
             document.getElementById('book-checkmark').style.fill,
-            document.getElementById('phone-checkmark').style.fill,
-            document.getElementById('theme-checkmark').style.fill
+            document.getElementById('phone-checkmark').style.fill
         ];
 
         const objectColor = objects[index] ? objects[index].style.backgroundColor : null;
@@ -278,39 +216,7 @@
             buttonunlock('https://github.com/EuroSzymon/ModelViewerTest/releases', 'book');
         } else if (objectColor === checkmarkColors[1]) {
             buttonunlock('https://euroszymon.github.io/ModelViewerTest/', 'phone');
-        } else if (objectColor === checkmarkColors[2]) {
-            unlockThemeToggle();
         }
-    }
-
-    function unlockThemeToggle() {
-        const icon = document.getElementById('theme-icon');
-
-        icon.classList.remove('locked');
-        icon.classList.add('unlocked');
-
-        icon.addEventListener('click', toggleTheme);
-
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-        adjustColorsForTheme();
-    }
-
-    function adjustColorsForTheme() {
-        const isLightMode = document.body.classList.contains('light-mode');
-        const textColor = isLightMode ? 'black' : 'white';
-
-        document.querySelectorAll('.text-label').forEach(label => {
-            label.style.color = textColor;
-        });
-
-        document.querySelectorAll('.icon').forEach(icon => {
-            if (!icon.classList.contains('unlocked')) {
-                icon.style.fill = textColor;
-            }
-        });
     }
 
     function buttonunlock(url, iconType) {
