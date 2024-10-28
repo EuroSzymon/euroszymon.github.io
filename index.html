@@ -115,12 +115,16 @@ body {
     height: 50px;
 }
 
+.icon-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
 @media (max-width: 768px) {
     .icon-container {
         flex-direction: column;
-    }
-    .text-label {
-        font-size: 14px;
+        align-items: center;
+        padding: 10px;
     }
     .icon {
         width: 40px;
@@ -339,14 +343,7 @@ if (phonelogic) {
 if (/Mobi|Android/i.test(navigator.userAgent)) {
     //window.location.href = "https://euroszymon.github.io/ModelViewerTest/";
 }
-function addButtonNavigation(id, url) {
-    const button = document.getElementById(id);
-    button.addEventListener("click", () => window.location.href = url);
-    button.addEventListener("touchstart", () => window.location.href = url);
-}
 
-addButtonNavigation("book-icon", "https://github.com/EuroSzymon/ModelViewerTest/releases");
-addButtonNavigation("phone-icon", "https://euroszymon.github.io/ModelViewerTest/");
 
 function pc_ondrag(event) {
     if (!isDragging) return;
