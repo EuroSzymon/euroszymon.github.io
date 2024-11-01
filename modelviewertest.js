@@ -32,13 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('DOMContentLoaded', () => {
         const switcherCheckmarkColor = coloralgorithm(); 
-        const modeSwitcher = document.getElementById('mode-switcher');
         const modeIcon = document.getElementById('mode-icon');
     
         modeIcon.style.fill = switcherCheckmarkColor;
     });
     
-    const modeSwitcher = document.getElementById('mode-switcher');
+    const modeSwitcher = document.getElementById('switcher-checkmark');
     modeSwitcher.addEventListener('click', () => {
         if (modeSwitcher.classList.contains('unlocked')) {
             const newMode = document.body.classList.contains('light-mode') ? 'dark' : 'light';
@@ -208,13 +207,11 @@ function ondrag(event) {
 }
 
 function stopdrag() {
-
     document.removeEventListener(isMobileDevice() ? 'touchmove' : 'mousemove', ondrag);
-    
-    currentDraggedObject = null;
-    
     check_buttonunlock(objects.indexOf(currentDraggedObject));
+    currentDraggedObject = null;
 }
+
 
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -226,13 +223,12 @@ function buttoncollision(object) {
     const icons = [
         { icon: document.getElementById('book-icon'), checkmarkColor: document.getElementById('book-checkmark').style.fill },
         { icon: document.getElementById('phone-icon'), checkmarkColor: document.getElementById('phone-checkmark').style.fill },
-        { icon: document.getElementById('mode-switcher'), checkmarkColor: document.getElementById('switcher-checkmark').style.fill }
+        { icon: document.getElementById('switcher-checkmark'), checkmarkColor: document.getElementById('switcher-checkmark').style.fill }
     ];
 
     const objectRect = object.getBoundingClientRect();
-    const objectColor = object.style.backgroundColor;
 
-    icons.forEach(({ icon, checkmarkColor }) => {
+    icons.forEach(({ icon }) => {
         if (!icon) return;
 
         const iconRect = icon.getBoundingClientRect();
@@ -243,13 +239,6 @@ function buttoncollision(object) {
             objectRect.top < iconRect.bottom &&
             objectRect.bottom > iconRect.top
         ) {
-            if (objectColor === checkmarkColor) {
-                icon.classList.remove('locked');
-                icon.classList.add('unlocked');
-            }
-        } else if (!icon.classList.contains('unlocked')) {
-            icon.classList.add('locked');
-            icon.classList.remove('unlocked');
         }
     });
 }
