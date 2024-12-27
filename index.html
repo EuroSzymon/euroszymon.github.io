@@ -6,9 +6,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Model Viewer Test</title>
+    <style>
+        .noscript-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            visibility: hidden;
+        }
+        noscript .noscript-overlay {
+            visibility: visible;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="noscript-overlay">
+        JavaScript is disabled in your browser. Please enable JavaScript to use this website.
+    </div>
+
     <div id="container" class="container"></div>
 
     <div style="position: relative;">
@@ -52,6 +77,13 @@
         </div>
     </div>
     
+    <noscript>
+        <div class="noscript-overlay">
+            JavaScript is disabled in your browser. Please enable JavaScript to use this website.
+        </div>
+    </noscript>
+    
     <script src="modelviewertest.js"></script>
+    <script src="mobile.js"></script>
 </body>
 </html>
