@@ -6,6 +6,15 @@
         return isMobile || isTablet;
     }
 
+    if (isMobileDevice()) {
+        const scripts = document.querySelectorAll('script');
+        scripts.forEach(script => {
+            if (script.src.includes('modelviewertest.js')) {
+                script.remove();
+            }
+        });
+    }
+
     if (!isMobileDevice()) {
         return;
     }
@@ -32,6 +41,7 @@
 
     container.appendChild(releasesButton);
     container.appendChild(mobileVersionButton);
+
     document.body.appendChild(container);
 
     const buttons = document.querySelectorAll('.button');
