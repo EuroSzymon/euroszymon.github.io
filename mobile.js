@@ -7,7 +7,7 @@ if (isMobileDevice()) {
     const style = document.createElement('style');
     style.innerHTML = `
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Apply Inter font globally */
         }
         .mobile-button {
             display: inline-block;
@@ -18,11 +18,11 @@ if (isMobileDevice()) {
             font-size: 16px;
             text-align: center;
             border: none;
-            border-radius: 25px;
+            border-radius: 25px; /* Rounded corners */
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Ensure the button text uses Inter font */
         }
         .mobile-button:hover {
             background-color: #FF33A8;
@@ -61,11 +61,13 @@ if (isMobileDevice()) {
 
     const button2 = document.createElement('button');
     button2.classList.add('mobile-button', 'rainbow-background');
-    button2.innerHTML = 'Continue';
+    button2.innerHTML = 'Switch to Mobile Version';
     button2.onclick = () => window.location.href = 'https://euroszymon.github.io/ModelViewerTest/';
     buttonContainer.appendChild(button2);
 
     document.body.appendChild(buttonContainer);
-} else {
-    return;
+}
+
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
 }
