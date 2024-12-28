@@ -20,8 +20,12 @@ if (isMobileDevice()) {
     overlay.appendChild(buttonContainer);
     document.body.appendChild(overlay);
 
+    const savedTheme = localStorage.getItem('theme') || 'black';
+    overlay.classList.toggle('white-background', savedTheme === 'white');
+
     overlay.addEventListener('click', () => {
-        overlay.classList.toggle('white-background');
+        const isWhite = overlay.classList.toggle('white-background');
+        localStorage.setItem('theme', isWhite ? 'white' : 'black');
     });
 
     const style = document.createElement('style');
@@ -60,27 +64,23 @@ if (isMobileDevice()) {
         }
 
         .rainbow-background {
-            background-color: red;
             color: white;
             animation: rainbowFade 6s infinite ease-in-out;
         }
 
         @keyframes rainbowFade {
-            0% { background-color: #ff007f; } 
-            15% { background-color: #ff8c00; }
-            30% { background-color: #fffd00; }
-            45% { background-color: #00ff00; } 
-            60% { background-color: #00bfff; } 
-            75% { background-color: #8a2be2; } 
-            100% { background-color: #ff007f; } 
+            0% { background-color: #ff007f; color: black; }
+            15% { background-color: #ff8c00; color: white; }
+            30% { background-color: #fffd00; color: black; }
+            45% { background-color: #00ff00; color: black; }
+            60% { background-color: #00bfff; color: white; }
+            75% { background-color: #8a2be2; color: white; }
+            100% { background-color: #ff007f; color: black; }
         }
     `;
     document.head.appendChild(style);
 }
 
-function isMobileDevice() {
-    return /Mobi|Android/i.test(navigator.userAgent);
-}
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
 }
