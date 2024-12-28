@@ -13,13 +13,17 @@ if (isMobileDevice()) {
 
     const button2 = document.createElement('button');
     button2.classList.add('mobile-button', 'rainbow-background');
-    button2.innerHTML = 'Switch to Mobile Version';
+    button2.innerHTML = 'Continue';
     button2.onclick = () => window.location.href = 'https://euroszymon.github.io/ModelViewerTest/';
     buttonContainer.appendChild(button2);
 
     overlay.appendChild(buttonContainer);
 
     document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', () => {
+        overlay.style.backgroundColor = (overlay.style.backgroundColor === 'rgb(0, 0, 0)') ? 'white' : 'black';
+    });
 
     const style = document.createElement('style');
     style.innerHTML = `
@@ -29,11 +33,12 @@ if (isMobileDevice()) {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: black;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            transition: background-color 0.5s ease;
         }
 
         .mobile-button {
@@ -44,7 +49,7 @@ if (isMobileDevice()) {
             margin: 10px;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
-            transition: background 0.5s ease, transform 0.2s ease;
+            transition: background 2s ease, transform 0.2s ease;
         }
 
         .mobile-button:hover {
@@ -65,7 +70,7 @@ if (isMobileDevice()) {
         }
     `;
     document.head.appendChild(style);
-} 
+}
 
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
