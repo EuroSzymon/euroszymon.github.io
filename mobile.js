@@ -1,67 +1,4 @@
 if (isMobileDevice()) {
-    const fontLink = document.createElement('link');
-    fontLink.rel = 'stylesheet';
-    fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap';
-    document.head.appendChild(fontLink);
-
-    const style = document.createElement('style');
-    style.innerHTML = `
-        body {
-            font-family: 'Inter', sans-serif; /* Apply Inter font globally */
-            margin: 0;
-            padding: 0;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        /* Mobile button styles */
-        .mobile-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            background-color: #FF5733;
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            font-family: 'Inter', sans-serif;
-        }
-        .mobile-button:hover {
-            background-color: #FF33A8;
-            transform: scale(1.1);
-        }
-        .mobile-button:active {
-            transform: scale(0.95);
-        }
-        @keyframes rainbow {
-            0% { background-color: #FF5733; }
-            14% { background-color: #33FF57; }
-            28% { background-color: #3357FF; }
-            42% { background-color: #FF33A8; }
-            57% { background-color: #F9FF33; }
-            71% { background-color: #33FFF7; }
-            85% { background-color: #FF0300; }
-            100% { background-color: #129CFF; }
-        }
-        .rainbow-background {
-            animation: rainbow 0.5s linear infinite; /* Slower animation, 0.5s duration */
-        }
-    `;
-    document.head.appendChild(style);
-
     const overlay = document.createElement('div');
     overlay.classList.add('overlay');
 
@@ -83,7 +20,53 @@ if (isMobileDevice()) {
     overlay.appendChild(buttonContainer);
 
     document.body.appendChild(overlay);
-}
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .mobile-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            margin: 10px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.5s ease, transform 0.2s ease;
+        }
+
+        .mobile-button:hover {
+            transform: scale(1.1);
+        }
+
+        .rainbow-background {
+            background-image: linear-gradient(45deg, #ff007f, #ff8c00, #fffd00, #00ff00, #00bfff, #8a2be2);
+            background-size: 400% 400%;
+            animation: rainbow 0.5s linear infinite;
+            color: white;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    `;
+    document.head.appendChild(style);
+} 
+
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
 }
