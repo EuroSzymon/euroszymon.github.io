@@ -22,7 +22,11 @@ if (isMobileDevice()) {
     document.body.appendChild(overlay);
 
     overlay.addEventListener('click', () => {
-        overlay.style.backgroundColor = (overlay.style.backgroundColor === 'rgb(0, 0, 0)') ? 'white' : 'black';
+        if (overlay.style.backgroundColor === 'rgb(0, 0, 0)') {
+            overlay.style.backgroundColor = 'white';
+        } else {
+            overlay.style.backgroundColor = 'black';
+        }
     });
 
     const style = document.createElement('style');
@@ -59,7 +63,7 @@ if (isMobileDevice()) {
         .rainbow-background {
             background-image: linear-gradient(45deg, #ff007f, #ff8c00, #fffd00, #00ff00, #00bfff, #8a2be2);
             background-size: 400% 400%;
-            animation: rainbow 0.5s linear infinite;
+            animation: rainbow 6s linear infinite;
             color: white;
         }
 
