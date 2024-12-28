@@ -8,7 +8,22 @@ if (isMobileDevice()) {
     style.innerHTML = `
         body {
             font-family: 'Inter', sans-serif; /* Apply Inter font globally */
+            margin: 0;
+            padding: 0;
         }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        /* Mobile button styles */
         .mobile-button {
             display: inline-block;
             padding: 15px 30px;
@@ -18,11 +33,11 @@ if (isMobileDevice()) {
             font-size: 16px;
             text-align: center;
             border: none;
-            border-radius: 25px; /* Rounded corners */
+            border-radius: 25px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            font-family: 'Inter', sans-serif; /* Ensure the button text uses Inter font */
+            font-family: 'Inter', sans-serif;
         }
         .mobile-button:hover {
             background-color: #FF33A8;
@@ -42,16 +57,16 @@ if (isMobileDevice()) {
             100% { background-color: #129CFF; }
         }
         .rainbow-background {
-            animation: rainbow 3s linear infinite;
+            animation: rainbow 0.5s linear infinite; /* Slower animation, 0.5s duration */
         }
     `;
     document.head.appendChild(style);
 
+    const overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+
     const buttonContainer = document.createElement('div');
-    buttonContainer.style.display = 'flex';
-    buttonContainer.style.flexDirection = 'column';
-    buttonContainer.style.alignItems = 'center';
-    buttonContainer.style.marginTop = '50px';
+    buttonContainer.style.textAlign = 'center';
 
     const button1 = document.createElement('button');
     button1.classList.add('mobile-button', 'rainbow-background');
@@ -65,9 +80,10 @@ if (isMobileDevice()) {
     button2.onclick = () => window.location.href = 'https://euroszymon.github.io/ModelViewerTest/';
     buttonContainer.appendChild(button2);
 
-    document.body.appendChild(buttonContainer);
-}
+    overlay.appendChild(buttonContainer);
 
+    document.body.appendChild(overlay);
+}
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
 }
