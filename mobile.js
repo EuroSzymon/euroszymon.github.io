@@ -26,6 +26,7 @@ if (isMobileDevice()) {
     overlay.addEventListener('click', () => {
         const isWhite = overlay.classList.toggle('white-background');
         localStorage.setItem('theme', isWhite ? 'white' : 'black');
+        updateButtonColors();
     });
 
     const style = document.createElement('style');
@@ -62,23 +63,40 @@ if (isMobileDevice()) {
         .mobile-button:hover {
             transform: scale(1.1);
         }
-
-        .rainbow-background {
-            color: white;
-            animation: rainbowFade 6s infinite ease-in-out;
-        }
-
-        @keyframes rainbowFade {
-            0% { background-color: #ff007f; color: black; }
-            15% { background-color: #ff8c00; color: white; }
-            30% { background-color: #fffd00; color: black; }
-            45% { background-color: #00ff00; color: black; }
-            60% { background-color: #00bfff; color: white; }
-            75% { background-color: #8a2be2; color: white; }
-            100% { background-color: #ff007f; color: black; }
-        }
     `;
     document.head.appendChild(style);
+
+    const colorsForWhiteText = [
+        '#000000', '#4B0082', '#013220', '#8B0000', '#2E8B57', 
+        '#191970', '#8B4513', '#228B22', '#6B8E23', '#8B008B'
+    ];
+
+    const colorsForBlackText = [
+        '#FFFFFF', '#FFFFE0', '#FFE4B5', '#FFB6C1', '#F5FFFA',
+        '#E6E6FA', '#E0FFFF', '#FFDAB9', '#FFFACD', '#FAFAD2'
+    ];
+
+    let currentColorIndex = 0;
+    let isWhiteTextList = true;
+
+    function updateButtonColors() {
+        const buttons = document.querySelectorAll('.mobile-button');
+        const currentList = isWhiteTextList ? colorsForWhiteText : colorsForBlackText;
+
+        buttons.forEach((button, index) => {
+            const colorIndex = (currentColorIndex + index) % currentList.length;
+            button.style.backgroundColor = currentList[colorIndex];
+            button.style.color = isWhiteTextList ? 'white' : 'black';
+        });
+        currentColorIndex++;
+        if (currentColorIndex >= currentList.length) {
+            currentColorIndex = 0;
+            isWhiteTextList = !isWhiteTextList;
+        }
+    }
+
+    updateButtonColors();
+    setInterval(updateButtonColors, 5000);
 }
 
 function isMobileDevice() {
