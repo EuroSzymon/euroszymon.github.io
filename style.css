@@ -1,0 +1,200 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    gap: 30px;
+}
+
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.object {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: grab;
+    background-color: gray;
+}
+
+.icon-container {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.icon-container > div {
+    padding: 10px;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    cursor: default;
+}
+
+.checkmark {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    fill: transparent;
+    z-index: -1;
+}
+
+.book-icon, .phone-icon {
+    fill: white;
+}
+
+.icon.locked {
+    opacity: 0.5;
+}
+
+.icon.unlocked {
+    cursor: pointer;
+}
+
+.text-label {
+    position: relative;
+    top: -3px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.copyfail {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.switcher-checkmark {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.switcher-checkmark.dark {
+    background-color: #333;
+}
+
+.toggle-circle {
+    width: 28px;
+    height: 28px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switcher-checkmark.dark .toggle-circle {
+    left: 30px;
+    background-color: #222;
+}
+
+#mode-icon {
+    width: 18px;
+    height: 18px;
+    fill: #333;
+    transition: fill 0.3s;
+}
+
+.switcher-checkmark.dark #mode-icon {
+    fill: #f0f0f0;
+}
+
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.dark-mode {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#switcher-checkmark {
+    cursor: pointer;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.checkmark-icon {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: -10px;
+    right: 5px;
+    fill: currentColor;
+}
+
+#tutorial-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s ease, visibility .2s ease;
+}
+
+#tutorial-modal.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+#tutorial-modal .content {
+    padding: 24px 32px;
+    max-width: 320px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+}
+
+body.light-mode #tutorial-modal .content {
+    background: #fff;
+    color: #000;
+}
+
+body.dark-mode #tutorial-modal .content {
+    background: #222;
+    color: #fff;
+}
